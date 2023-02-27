@@ -1,0 +1,26 @@
+name: 🔮Coding-style
+run-name: 🔮 | ${{ github.actor }} run a standard check
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  check-norme:
+    name: 🔮 Banana
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load docker images
+        run: |
+          docker run --rm -i -v "$PWD":"/mnt/delivery" -v "$PWD":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"
+
+      - name: Load coding-style-reports.log
+        run: |
+          echo "$(grep -c ": MAJOR:" "coding-style-reports.log")$(grep -c ": MINOR:" "coding-style-reports.log")$(grep -c ": INFO:" "coding-style-reports.log")" > stdout
+
+      - name: Condition jobs
+        run: |
+          if ! [ "$(cat stdout)" = "000" ]; then exit 1; fi && rm -f coding-style-reports.log stdout
