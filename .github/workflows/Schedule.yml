@@ -1,0 +1,12 @@
+name: 📆 Schedule
+run-name: ➡️ | ${{ github.actor }} launch a push from ${{ github.ref }}
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "42 8 * * *"
+    # - cron: "43 8 12 3 *"
+    
+jobs:
+  check-norme:
+    uses: ./.github/workflows/Norme.yml
